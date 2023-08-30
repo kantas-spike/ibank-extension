@@ -15,7 +15,22 @@
     "commands": [{
       "command": "ibank-extension.helloWorld",
       "title": "Hello World"
-    }]
+    }],
+    "configuration": {
+      "title": "Idea Bank",
+      "properties": {
+        "ibank-extension.sitePath": {
+          "type": "string",
+          "default": "~/ibank",
+          "markdownDescription": "Path of Idea Bank"
+        },
+        "ibank-extension.contentDir": {
+          "type": "string",
+          "default": "content",
+          "markdownDescription": "dirname of Idea Bank's content directory"
+        }
+      }
+    }
   },
   "scripts": {
     "lint": "eslint .",
