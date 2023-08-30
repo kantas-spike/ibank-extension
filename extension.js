@@ -55,42 +55,37 @@ function outputDirItems(contentPath) {
   return getDirs(targetPath).map((d) => path.relative(targetPath, d));
 }
 
+
+const terminalName = "Idea Bank"
+
 function createIdeaBankTerminal() {
   const t = vscode.window.createTerminal({
-    name: "Idea Bank",
+    name: terminalName,
   });
   t.sendText(`cd ${getSitePath()}`, true);
   return t;
 }
 
 function openIdeaBankTerminal() {
-  if (!ibankTerminal || ibankTerminal.exitStatus) {
-    ibankTerminal = createIdeaBankTerminal();
-    ibankTerminal.show();
+  let t = vscode.window.terminals.filter(t => t.name === terminalName)[0]
+  if (t) {
+    return t
+  } else {
+    t = createIdeaBankTerminal();
+    t.show();
+    return t
   }
 }
 
 function runCommandInIdeaBankTerminal(command) {
-  openIdeaBankTerminal();
-  ibankTerminal.sendText(command, true);
-}
-
-function disposeIdeaBankTerminal() {
-  if (ibankTerminal && !ibankTerminal.exitStatus) {
-    ibankTerminal.dispose();
-  }
+  const t = openIdeaBankTerminal();
+  t.sendText(command, true);
 }
 
 function getSimpleQuickInput(name, defaultDir, kind) {
   return async () => {
-    // The code you place here will be executed every time your command is executed
-    let prompt = `${name}を記載するファイル名(拡張子不要)を入力してください`;
-    if (kind === "idea-bundle") {
-      prompt = `${name}を記載するフォルダ名を入力してください`;
-    }
-
     const fileName = await vscode.window.showInputBox({
-      prompt,
+      title: `${name}の名前`,
       validateInput: (input) => {
         if (input.includes(" ")) {
           return "名前に空白は使用できません";
@@ -121,7 +116,7 @@ function getSimpleQuickInput(name, defaultDir, kind) {
       outputDirItems(getContentPath()),
       {
         canPickMany: false,
-        title: `${name}を格納するフォルダを選択してください。選択しない場合は[Esc]を押してください`,
+        title: `出力先フォルダの選択: デフォルトのフォルダ(${defaultDir})に格納する場合は[Esc]を押してください`,
       }
     );
     const defaultOutputDir = defaultDir;
@@ -151,8 +146,6 @@ function getSimpleQuickInput(name, defaultDir, kind) {
     }
   };
 }
-
-let ibankTerminal;
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -186,7 +179,7 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addStone",
-      getSimpleQuickInput("自然石", "fieldstones", "stone")
+      getSimpleQuickInput("自然石", "fieldstones", "fieldstone")
     )
   );
 
@@ -200,7 +193,6 @@ function activate(context) {
 
 // This method is called when your extension is deactivated
 function deactivate() {
-  disposeIdeaBankTerminal();
 }
 
 module.exports = {
