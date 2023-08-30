@@ -55,30 +55,31 @@ function outputDirItems(contentPath) {
   return getDirs(targetPath).map((d) => path.relative(targetPath, d));
 }
 
+
+const terminalName = "Idea Bank"
+
 function createIdeaBankTerminal() {
   const t = vscode.window.createTerminal({
-    name: "Idea Bank",
+    name: terminalName,
   });
   t.sendText(`cd ${getSitePath()}`, true);
   return t;
 }
 
 function openIdeaBankTerminal() {
-  if (!ibankTerminal || ibankTerminal.exitStatus) {
-    ibankTerminal = createIdeaBankTerminal();
-    ibankTerminal.show();
+  let t = vscode.window.terminals.filter(t => t.name === terminalName)[0]
+  if (t) {
+    return t
+  } else {
+    t = createIdeaBankTerminal();
+    t.show();
+    return t
   }
 }
 
 function runCommandInIdeaBankTerminal(command) {
-  openIdeaBankTerminal();
-  ibankTerminal.sendText(command, true);
-}
-
-function disposeIdeaBankTerminal() {
-  if (ibankTerminal && !ibankTerminal.exitStatus) {
-    ibankTerminal.dispose();
-  }
+  const t = openIdeaBankTerminal();
+  t.sendText(command, true);
 }
 
 function getSimpleQuickInput(name, defaultDir, kind) {
@@ -146,8 +147,6 @@ function getSimpleQuickInput(name, defaultDir, kind) {
   };
 }
 
-let ibankTerminal;
-
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -194,7 +193,6 @@ function activate(context) {
 
 // This method is called when your extension is deactivated
 function deactivate() {
-  disposeIdeaBankTerminal();
 }
 
 module.exports = {
