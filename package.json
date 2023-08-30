@@ -12,10 +12,32 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "ibank-extension.helloWorld",
-      "title": "Hello World"
-    }],
+    "commands": [
+      {
+        "command": "ibank-extension.addIdea",
+        "category": "Idea Bank",
+        "title": "Add Idea (File)",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "ibank-extension.addIdeaBundle",
+        "category": "Idea Bank",
+        "title": "Add Idea (Bundle)",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "ibank-extension.addStone",
+        "category": "Idea Bank",
+        "title": "Add Stone (File)",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "ibank-extension.addTil",
+        "category": "Idea Bank",
+        "title": "Add Tile (File)",
+        "icon": "$(new-file)"
+      }
+    ],
     "configuration": {
       "title": "Idea Bank",
       "properties": {
