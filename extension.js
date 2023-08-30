@@ -186,7 +186,7 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addStone",
-      getSimpleQuickInput("自然石", "fieldstones", "stone")
+      getSimpleQuickInput("自然石", "fieldstones", "fieldstone")
     )
   );
 
