@@ -51,6 +51,7 @@
     }
   },
   "scripts": {
+    "package": "npx vsce package",
     "lint": "eslint .",
     "pretest": "npm run lint",
     "test": "node ./test/runTest.js"
