@@ -16,26 +16,22 @@
       {
         "command": "ibank-extension.addIdea",
         "category": "Idea Bank",
-        "title": "Add Idea (File)",
-        "icon": "$(new-file)"
+        "title": "Add Idea (File)"
       },
       {
         "command": "ibank-extension.addIdeaBundle",
         "category": "Idea Bank",
-        "title": "Add Idea (Bundle)",
-        "icon": "$(new-folder)"
+        "title": "Add Idea (Bundle)"
       },
       {
         "command": "ibank-extension.addStone",
         "category": "Idea Bank",
-        "title": "Add Stone (File)",
-        "icon": "$(new-file)"
+        "title": "Add Stone (File)"
       },
       {
         "command": "ibank-extension.addTil",
         "category": "Idea Bank",
-        "title": "Add Tile (File)",
-        "icon": "$(new-file)"
+        "title": "Add TIL (File)"
       }
     ],
     "configuration": {
