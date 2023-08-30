@@ -83,14 +83,8 @@ function disposeIdeaBankTerminal() {
 
 function getSimpleQuickInput(name, defaultDir, kind) {
   return async () => {
-    // The code you place here will be executed every time your command is executed
-    let prompt = `${name}を記載するファイル名(拡張子不要)を入力してください`;
-    if (kind === "idea-bundle") {
-      prompt = `${name}を記載するフォルダ名を入力してください`;
-    }
-
     const fileName = await vscode.window.showInputBox({
-      prompt,
+      title: `${name}の名前`,
       validateInput: (input) => {
         if (input.includes(" ")) {
           return "名前に空白は使用できません";
@@ -121,7 +115,7 @@ function getSimpleQuickInput(name, defaultDir, kind) {
       outputDirItems(getContentPath()),
       {
         canPickMany: false,
-        title: `${name}を格納するフォルダを選択してください。選択しない場合は[Esc]を押してください`,
+        title: `出力先フォルダの選択: デフォルトのフォルダ(${defaultDir})に格納する場合は[Esc]を押してください`,
       }
     );
     const defaultOutputDir = defaultDir;
