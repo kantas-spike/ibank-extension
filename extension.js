@@ -54,9 +54,16 @@ function getDirs(baseDir) {
   return results;
 }
 
-function outputDirItems(contentPath) {
+function outputDirItems(contentPath, defaultDir) {
   const targetPath = expandUserDir(contentPath);
-  return getDirs(targetPath).map((d) => path.relative(targetPath, d));
+  const list = getDirs(targetPath).map((d) => path.relative(targetPath, d));
+
+  if (defaultDir) {
+    const excluded = list.filter(d => d !== defaultDir)
+    return [defaultDir, ...excluded]
+  } else {
+    return list
+  }
 }
 
 
@@ -117,7 +124,7 @@ function getSimpleQuickInput(name, defaultDir, kind) {
       }
     }
     const outputFolder = await vscode.window.showQuickPick(
-      outputDirItems(getContentPath()),
+      outputDirItems(getContentPath(), defaultDir),
       {
         canPickMany: false,
         title: `出力先フォルダの選択: デフォルトのフォルダ(${defaultDir})に格納する場合は[Esc]を押してください`,
