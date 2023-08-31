@@ -176,7 +176,7 @@ function activate(context) {
     'Congratulations, your extension "ibank-extension" is now active!'
   );
 
-  serverOutputChannel = vscode.window.createOutputChannel(terminalName)
+  serverOutputChannel = vscode.window.createOutputChannel(terminalName, {log: true})
   serverOutputChannel.show()
 
   openIdeaBankTerminal();
@@ -222,10 +222,10 @@ function activate(context) {
         serverOutputChannel.appendLine(`command: ${cmd}`)
         serverProcess = child_process.spawn(cmd, {"cwd": sitePath, shell: true})
         serverProcess.stdout.on('data', (data) => {
-          serverOutputChannel.appendLine(data)
+          serverOutputChannel.appendLine(data.toString())
         })
         serverProcess.stderr.on('data', (data) => {
-          serverOutputChannel.appendLine(data)
+          serverOutputChannel.appendLine(data.toString())
         })
         serverProcess.on('close', (code) => {
           serverOutputChannel.appendLine(`child process exited with code: ${code}`)
