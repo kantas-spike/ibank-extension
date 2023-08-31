@@ -96,7 +96,7 @@ function runCommandInIdeaBankTerminal(command) {
 function getSimpleQuickInput(name, defaultDir, kind) {
   return async () => {
     const fileName = await vscode.window.showInputBox({
-      title: `${name}の名前`,
+      title: `${name}の名前入力:`,
       validateInput: (input) => {
         if (input.includes(" ")) {
           return "名前に空白は使用できません";
@@ -127,7 +127,7 @@ function getSimpleQuickInput(name, defaultDir, kind) {
       outputDirItems(getContentPath(), defaultDir),
       {
         canPickMany: false,
-        title: `出力先フォルダの選択: デフォルトのフォルダ(${defaultDir})に格納する場合は[Esc]を押してください`,
+        title: `出力先フォルダの選択:`,
       }
     );
     const defaultOutputDir = defaultDir;
@@ -135,10 +135,8 @@ function getSimpleQuickInput(name, defaultDir, kind) {
     if (outputFolder) {
       outputPath = path.join(outputFolder, itemName);
     } else {
-      vscode.window.showInformationMessage(
-        `フォルダが選択されなかったため、デフォルトディレクトリ(${defaultOutputDir})に格納します。`
-      );
-      outputPath = path.join(defaultOutputDir, itemName);
+      vscode.window.showErrorMessage("出力フォルダを選択してください");
+      return;
     }
 
     // vscode.window.showInformationMessage(`${path.join(getContentPath(), outputPath)} を作成します...: ${contentExists(path.join(getContentPath(), outputPath))}`);
