@@ -3,11 +3,15 @@
 const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
+const child_process = require('child_process')
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 
 const EXTENSION_NAME = "ibank-extension";
+let serverOutputChannel
+let serverProcess
 
 function getSitePath() {
   return vscode.workspace.getConfiguration(EXTENSION_NAME).get("sitePath");
@@ -147,6 +151,16 @@ function getSimpleQuickInput(name, defaultDir, kind) {
   };
 }
 
+function stopServerProcess() {
+  if (serverProcess) {
+    if(serverProcess.kill('SIGINT')) {
+      serverProcess = null
+    } else {
+      vscode.window.showErrorMessage("サーバープロセスの終了に失敗しました")
+    }
+  }
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -156,6 +170,9 @@ function activate(context) {
   console.log(
     'Congratulations, your extension "ibank-extension" is now active!'
   );
+
+  serverOutputChannel = vscode.window.createOutputChannel(terminalName)
+  serverOutputChannel.show()
 
   openIdeaBankTerminal();
 
@@ -189,10 +206,43 @@ function activate(context) {
       getSimpleQuickInput("TIL", "til", "til")
     )
   );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "ibank-extension.startServer",
+      async () => {
+        const sitePath = getRealPath(getSitePath())
+        const cmd = vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverCommand")
+        serverOutputChannel.appendLine(`sitePath: ${sitePath}`)
+        serverOutputChannel.appendLine(`command: ${cmd}`)
+        serverProcess = child_process.spawn(cmd, {"cwd": sitePath, shell: true})
+        serverProcess.stdout.on('data', (data) => {
+          serverOutputChannel.appendLine(data)
+        })
+        serverProcess.stderr.on('data', (data) => {
+          serverOutputChannel.appendLine(data)
+        })
+        serverProcess.on('close', (code) => {
+          serverOutputChannel.appendLine(`child process exited with code: ${code}`)
+        })
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "ibank-extension.stopServer",
+      async () => {
+        stopServerProcess()
+      }
+    )
+  );
 }
 
 // This method is called when your extension is deactivated
 function deactivate() {
+  stopServerProcess()
+  serverOutputChannel.dispose()
 }
 
 module.exports = {

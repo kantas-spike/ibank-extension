@@ -14,9 +14,13 @@ Hugoで管理されているアイデアバンクサイトのコンテンツを�
 - TIL
 - アイデア(バンドル形式)
 
+Hugoサーバーの起動と停止を行えます。
+
 ## 設定
 
 - sitePath
   - デフォルト値: `~/ibank`
 - contentDir
   - デフォルト値: `content`
+- serverCommand
+  - デフォルト値: `hugo server -D --disableFastRender --ignoreCache --cleanDestinationDir`

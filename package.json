@@ -32,6 +32,16 @@
         "command": "ibank-extension.addTil",
         "category": "Idea Bank",
         "title": "Add TIL (File)"
+      },
+      {
+        "command": "ibank-extension.startServer",
+        "category": "Idea Bank",
+        "title": "Start Hugo Server"
+      },
+      {
+        "command": "ibank-extension.stopServer",
+        "category": "Idea Bank",
+        "title": "Stop Hugo Server"
       }
     ],
     "configuration": {
@@ -46,6 +56,11 @@
           "type": "string",
           "default": "content",
           "markdownDescription": "dirname of Idea Bank's content directory"
+        },
+        "ibank-extension.serverCommand": {
+          "type": "string",
+          "default": "hugo server -D --disableFastRender --ignoreCache --cleanDestinationDir",
+          "markdownDescription": "Command to start hugo server"
         }
       }
     }
