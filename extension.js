@@ -102,10 +102,35 @@ function getSimpleQuickInput(name, defaultDir, kind) {
   };
 }
 
+function startServerProcess() {
+  if (serverProcess) {
+    vscode.window.showWarningMessage("サーバーは既に起動しています。")
+  } else {
+    const sitePath = utils.getRealPath(utils.getSitePath())
+    const cmd = utils.getServerCommand()
+    serverOutputChannel.appendLine(`sitePath: ${sitePath}`)
+    serverOutputChannel.appendLine(`command: ${cmd}`)
+    serverProcess = child_process.spawn(cmd, {"cwd": sitePath, shell: true})
+    serverProcess.stdout.on('data', (data) => {
+      serverOutputChannel.appendLine(data.toString())
+    })
+    serverProcess.stderr.on('data', (data) => {
+      serverOutputChannel.appendLine(data.toString())
+    })
+    serverProcess.on('close', (code) => {
+      serverOutputChannel.appendLine(`child process exited with code: ${code}`)
+    })
+    vscode.window.showInformationMessage("サーバーを起動しました。")
+    serverOutputChannel.show()
+  }
+}
+
 function stopServerProcess() {
   if (serverProcess) {
     if(serverProcess.kill('SIGINT')) {
       serverProcess = null
+      vscode.window.showInformationMessage("サーバーを停止しました。")
+      serverOutputChannel.show()
     } else {
       vscode.window.showErrorMessage("サーバープロセスの終了に失敗しました")
     }
@@ -161,21 +186,7 @@ function activate(context) {
     vscode.commands.registerCommand(
       "ibank-extension.startServer",
       async () => {
-        const sitePath = utils.getRealPath(utils.getSitePath())
-        const cmd = utils.getServerCommand()
-        serverOutputChannel.show()
-        serverOutputChannel.appendLine(`sitePath: ${sitePath}`)
-        serverOutputChannel.appendLine(`command: ${cmd}`)
-        serverProcess = child_process.spawn(cmd, {"cwd": sitePath, shell: true})
-        serverProcess.stdout.on('data', (data) => {
-          serverOutputChannel.appendLine(data.toString())
-        })
-        serverProcess.stderr.on('data', (data) => {
-          serverOutputChannel.appendLine(data.toString())
-        })
-        serverProcess.on('close', (code) => {
-          serverOutputChannel.appendLine(`child process exited with code: ${code}`)
-        })
+        startServerProcess()
       }
     )
   );
