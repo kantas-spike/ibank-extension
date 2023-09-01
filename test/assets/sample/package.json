@@ -1,0 +1,28 @@
+{
+  "comments": {
+    "dependencies": {
+      "postcss-cli": "github.com/kantas-spike/idea_bank"
+    },
+    "devDependencies": {
+      "autoprefixer": "github.com/kantas-spike/idea_bank",
+      "chroma-js": "github.com/kantas-spike/idea_bank",
+      "postcss": "github.com/kantas-spike/idea_bank",
+      "postcss-import": "github.com/kantas-spike/idea_bank",
+      "postcss-nested": "github.com/kantas-spike/idea_bank",
+      "tailwindcss": "github.com/kantas-spike/idea_bank"
+    }
+  },
+  "dependencies": {
+    "postcss-cli": "^10.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.15",
+    "chroma-js": "^2.4.2",
+    "postcss": "^8.4.28",
+    "postcss-import": "^15.1.0",
+    "postcss-nested": "^6.0.1",
+    "tailwindcss": "^3.3.3"
+  },
+  "name": "sample",
+  "version": "0.1.0"
+}
