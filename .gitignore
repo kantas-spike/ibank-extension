@@ -3,3 +3,4 @@ node_modules
 *.vsix
 test/assets/sample/.vscode/settings.json
 test/assets/sample/.hugo_build.lock
+test/assets/sample/hugo_stats.json

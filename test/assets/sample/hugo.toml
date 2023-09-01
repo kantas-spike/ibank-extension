@@ -1,8 +1,24 @@
-baseURL = 'https://example.org/'
-languageCode = 'en-us'
-title = 'My New Hugo Site'
-
+baseURL = 'http://example.org/'
+languageCode = 'ja-jp'
+title = 'Idea Bank'
 
 [module]
+  [[module.mounts]]
+    source = "assets"
+    target = "assets"
+  [[module.mounts]]
+    source = "hugo_stats.json"
+    target = "assets/watching/hugo_stats.json"
+
   [[module.imports]]
-    path = 'github.com/kantas-spike/ibank-extension'
+    path = 'github.com/kantas-spike/idea_bank'
+
+[build]
+  writeStats = true
+
+[[build.cachebusters]]
+  source = 'assets/watching/hugo_stats\.json'
+  target = 'theme\.css'
+[[build.cachebusters]]
+  source = '(postcss|tailwind)\.config\.js'
+  target = 'css'
