@@ -2,3 +2,4 @@ node_modules
 .vscode-test/
 *.vsix
 test/assets/sample/.vscode/settings.json
+test/assets/sample/.hugo_build.lock
