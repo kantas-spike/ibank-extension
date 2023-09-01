@@ -36,7 +36,12 @@ function getRealPath(inputPath) {
   return expandUserDir(inputPath);
 }
 
+const ITEM_DIRS = ["ideas", "fieldstones", "til"]
+
 function getDirs(baseDir) {
+  if (!fs.existsSync(baseDir)) {
+    return ITEM_DIRS.map(d => path.join(baseDir, d))
+  }
   const results = [];
   fs.readdirSync(baseDir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
@@ -45,6 +50,11 @@ function getDirs(baseDir) {
       results.push(aDir);
       getDirs(aDir).forEach((d) => results.push(d));
     });
+  ITEM_DIRS.map(d => path.join(baseDir, d)).forEach(d => {
+    if (!results.includes(d)) {
+      results.push(d)
+    }
+  })
   return results;
 }
 
