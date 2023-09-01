@@ -109,6 +109,8 @@ function stopServerProcess() {
     } else {
       vscode.window.showErrorMessage("サーバープロセスの終了に失敗しました")
     }
+  } else {
+    vscode.window.showWarningMessage("サーバーは起動していません")
   }
 }
 
