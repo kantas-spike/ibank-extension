@@ -103,7 +103,7 @@ function getSimpleQuickInput(name, defaultDir, kind) {
 }
 
 function startServerProcess() {
-  if (serverProcess) {
+  if (serverProcess && !serverProcess.exitCode) {
     vscode.window.showWarningMessage("サーバーは既に起動しています。")
   } else {
     const sitePath = utils.getRealPath(utils.getSitePath())
@@ -111,6 +111,7 @@ function startServerProcess() {
     serverOutputChannel.appendLine(`sitePath: ${sitePath}`)
     serverOutputChannel.appendLine(`command: ${cmd}`)
     serverProcess = child_process.spawn(cmd, {"cwd": sitePath, shell: true})
+
     serverProcess.stdout.on('data', (data) => {
       serverOutputChannel.appendLine(data.toString())
     })
@@ -120,13 +121,21 @@ function startServerProcess() {
     serverProcess.on('close', (code) => {
       serverOutputChannel.appendLine(`child process exited with code: ${code}`)
     })
-    vscode.window.showInformationMessage("サーバーを起動しました。")
+
+    if (!serverProcess.exitCode) {
+      vscode.window.showInformationMessage("サーバーを起動しました。")
+    } else {
+      vscode.window.showErrorMessage(`サーバーを起動に失敗しました。: exitCode: ${serverProcess.exitCode}`)
+    }
     serverOutputChannel.show()
   }
 }
 
 function stopServerProcess() {
-  if (serverProcess) {
+  if (serverProcess && serverProcess.exitCode) {
+    vscode.window.showWarningMessage("サーバーは既に終了しています")
+  }
+  else if (serverProcess && !serverProcess.exitCode) {
     if(serverProcess.kill('SIGINT')) {
       serverProcess = null
       vscode.window.showInformationMessage("サーバーを停止しました。")
