@@ -39,7 +39,7 @@ suite('Extension Test Suite', () => {
 	});
 
 	test('outputDirItems', () => {
-		const contentPth = path.resolve(`${__dirname}/assets/content`)
+		const contentPth = path.resolve(`${__dirname}/../assets/sample/content`)
 		let list = utils.outputDirItems(contentPth, "ideas")
 		assert.strictEqual(3, list.length)
 		assert.strictEqual("ideas", list[0])
