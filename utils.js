@@ -38,7 +38,7 @@ function getRealPath(inputPath) {
 
 const ITEM_DIRS = ["ideas", "fieldstones", "til"]
 
-function getDirs(baseDir) {
+function getDirs(baseDir, isRoot=true) {
   if (!fs.existsSync(baseDir)) {
     return ITEM_DIRS.map(d => path.join(baseDir, d))
   }
@@ -48,13 +48,15 @@ function getDirs(baseDir) {
     .forEach((entry) => {
       const aDir = path.resolve(baseDir, entry.name);
       results.push(aDir);
-      getDirs(aDir).forEach((d) => results.push(d));
+      getDirs(aDir, false).forEach((d) => results.push(d));
     });
-  ITEM_DIRS.map(d => path.join(baseDir, d)).forEach(d => {
-    if (!results.includes(d)) {
-      results.push(d)
-    }
-  })
+  if (isRoot) {
+    ITEM_DIRS.map(d => path.join(baseDir, d)).forEach(d => {
+      if (!results.includes(d)) {
+        results.push(d)
+      }
+    })
+  }
   return results;
 }
 
