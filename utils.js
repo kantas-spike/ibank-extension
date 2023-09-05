@@ -39,9 +39,6 @@ function getRealPath(inputPath) {
 const ITEM_DIRS = ["ideas", "fieldstones", "til"]
 
 function getDirs(baseDir, isRoot=true) {
-  if (!fs.existsSync(baseDir)) {
-    return ITEM_DIRS.map(d => path.join(baseDir, d))
-  }
   const results = [];
   fs.readdirSync(baseDir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
