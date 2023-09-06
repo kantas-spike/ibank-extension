@@ -1,6 +1,6 @@
 const vscode = require("vscode");
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs/promises");
 const os = require("os")
 
 const EXTENSION_NAME = "ibank-extension";
@@ -38,34 +38,45 @@ function getRealPath(inputPath) {
 
 const ITEM_DIRS = ["ideas", "fieldstones", "til"]
 
-function getDirs(baseDir, isRoot=true) {
+async function getDirs(baseDir, isRoot = true) {
   const results = [];
-  fs.readdirSync(baseDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .forEach((entry) => {
-      const aDir = path.resolve(baseDir, entry.name);
-      results.push(aDir);
-      getDirs(aDir, false).forEach((d) => results.push(d));
-    });
-  if (isRoot) {
-    ITEM_DIRS.map(d => path.join(baseDir, d)).forEach(d => {
-      if (!results.includes(d)) {
-        results.push(d)
+  try {
+    const entries = await fs.readdir(baseDir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        const aDir = path.resolve(baseDir, entry.name);
+        results.push(aDir);
+        const subDirs = await getDirs(aDir, false);
+        results.push(...subDirs);
       }
-    })
+    }
+
+    if (isRoot) {
+      ITEM_DIRS.map((d) => path.join(baseDir, d)).forEach((d) => {
+        if (!results.includes(d)) {
+          results.push(d);
+        }
+      });
+    }
+  } catch (err) {
+    console.error(err.message)
+    throw new Error(`ディレクトリ一覧の取得に失敗しました。: ${err.message}`)
   }
   return results;
 }
 
-function outputDirItems(contentPath, defaultDir) {
+async function outputDirItems(contentPath, defaultDir) {
   const targetPath = expandUserDir(contentPath);
-  const list = getDirs(targetPath).map((d) => path.relative(targetPath, d));
+  const list = await getDirs(targetPath)
+
+  const results = list.map((d) => path.relative(targetPath, d));
 
   if (defaultDir) {
-    const excluded = list.filter((d) => d !== defaultDir);
+    const excluded = results.filter((d) => d !== defaultDir);
     return [defaultDir, ...excluded];
   } else {
-    return list;
+    return results;
   }
 }
 
