@@ -62,6 +62,11 @@
           "default": 3131,
           "markdownDescription": "The Port Number of Hugo Server"
         },
+        "ibank-extension.excludedDirNames": {
+          "type": "array",
+          "default": [],
+          "markdownDescription": "The directory names to exclude. (ex: 'data', images')"
+        },
         "ibank-extension.serverCommand": {
           "type": "string",
           "default": "hugo server -D --disableFastRender --ignoreCache --cleanDestinationDir",

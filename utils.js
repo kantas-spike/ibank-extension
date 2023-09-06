@@ -24,6 +24,10 @@ function getServerPortNo() {
   return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverPortNo")
 }
 
+function getExcludedDirNames() {
+  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("excludedDirNames")
+}
+
 function expandUserDir(inputPath) {
   const userHome = os.homedir()
   const tilde_slash = /^~\//;
