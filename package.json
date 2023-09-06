@@ -57,6 +57,11 @@
           "default": "content",
           "markdownDescription": "dirname of Idea Bank's content directory"
         },
+        "ibank-extension.serverPortNo": {
+          "type": "number",
+          "default": 3131,
+          "markdownDescription": "The Port Number of Hugo Server"
+        },
         "ibank-extension.serverCommand": {
           "type": "string",
           "default": "hugo server -D --disableFastRender --ignoreCache --cleanDestinationDir",

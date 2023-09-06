@@ -22,5 +22,7 @@ Hugoサーバーの起動と停止を行えます。
   - デフォルト値: `~/ibank`
 - contentDir
   - デフォルト値: `content`
+- serverPortNo
+  - デフォルト値: 3131
 - serverCommand
   - デフォルト値: `hugo server -D --disableFastRender --ignoreCache --cleanDestinationDir`

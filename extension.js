@@ -115,7 +115,9 @@ function startServerProcess() {
     vscode.window.showWarningMessage("サーバーは既に起動しています。")
   } else {
     const sitePath = utils.getRealPath(utils.getSitePath())
-    const cmd = utils.getServerCommand()
+    const portNo = utils.getServerPortNo()
+    const cmd = utils.getServerCommand() + ` --port ${portNo}`
+
     serverOutputChannel.appendLine(`sitePath: ${sitePath}`)
     serverOutputChannel.appendLine(`command: ${cmd}`)
     serverProcess = child_process.spawn(cmd, {"cwd": sitePath, shell: true})
