@@ -132,6 +132,9 @@ function startServerProcess() {
     })
     serverProcess.on('close', (code) => {
       serverOutputChannel.appendLine(`child process exited with code: ${code}`)
+      if (code !== 0) {
+        vscode.window.showErrorMessage(`サーバープロセスが終了しました。: exitCode: ${code}`)
+      }
     })
 
     if (!serverProcess.exitCode) {
@@ -151,13 +154,13 @@ function stopServerProcess() {
     if(serverProcess.kill('SIGINT')) {
       serverProcess = null
       vscode.window.showInformationMessage("サーバーを停止しました。")
-      serverOutputChannel.show()
     } else {
       vscode.window.showErrorMessage("サーバープロセスの終了に失敗しました")
     }
   } else {
     vscode.window.showWarningMessage("サーバーは起動していません")
   }
+  serverOutputChannel.show()
 }
 
 /**
@@ -170,7 +173,7 @@ function activate(context) {
     'Congratulations, your extension "ibank-extension" is now active!'
   );
   serverOutputChannel = vscode.window.createOutputChannel(terminalName, {log: true})
-  serverOutputChannel.show()
+  serverOutputChannel.clear()
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with  registerCommand
@@ -216,7 +219,6 @@ function activate(context) {
     vscode.commands.registerCommand(
       "ibank-extension.stopServer",
       async () => {
-        serverOutputChannel.show()
         stopServerProcess()
       }
     )
