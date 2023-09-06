@@ -5,4 +5,4 @@ test/assets/sample/.vscode/settings.json
 test/assets/sample/.hugo_build.lock
 test/assets/sample/hugo_stats.json
 test/assets/sample/resources/
-test/assets/sample/content/_index.md
+test/assets/sample/content/*
