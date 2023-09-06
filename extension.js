@@ -70,8 +70,9 @@ function addItem(name, defaultDir, kind) {
           return;
         }
       }
+      const ignoreDirNames = utils.getExcludedDirNames()
       const outputFolder = await vscode.window.showQuickPick(
-        utils.outputDirItems(utils.getContentPath(), defaultDir),
+        utils.outputDirItems(utils.getContentPath(), defaultDir, ignoreDirNames),
         {
           canPickMany: false,
           title: `出力先フォルダの選択:`,

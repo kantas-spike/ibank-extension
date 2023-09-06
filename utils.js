@@ -24,6 +24,10 @@ function getServerPortNo() {
   return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverPortNo")
 }
 
+function getExcludedDirNames() {
+  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("excludedDirNames")
+}
+
 function expandUserDir(inputPath) {
   const userHome = os.homedir()
   const tilde_slash = /^~\//;
@@ -42,16 +46,19 @@ function getRealPath(inputPath) {
 
 const ITEM_DIRS = ["ideas", "fieldstones", "til"]
 
-async function getDirs(baseDir, isRoot = true) {
+async function getDirs(baseDir, isRoot = true, ignoreDirNames=[]) {
   const results = [];
   try {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });
 
     for (const entry of entries) {
       if (entry.isDirectory()) {
+        if (ignoreDirNames.includes(entry.name)) {
+          continue
+        }
         const aDir = path.resolve(baseDir, entry.name);
         results.push(aDir);
-        const subDirs = await getDirs(aDir, false);
+        const subDirs = await getDirs(aDir, false, ignoreDirNames);
         results.push(...subDirs);
       }
     }
@@ -70,9 +77,9 @@ async function getDirs(baseDir, isRoot = true) {
   return results;
 }
 
-async function outputDirItems(contentPath, defaultDir) {
+async function outputDirItems(contentPath, defaultDir, ignoreDirNames=[]) {
   const targetPath = expandUserDir(contentPath);
-  const list = await getDirs(targetPath)
+  const list = await getDirs(targetPath, true, ignoreDirNames)
 
   const results = list.map((d) => path.relative(targetPath, d));
 
@@ -88,6 +95,7 @@ module.exports = {
   getSitePath,
   getContentPath,
   getServerPortNo,
+  getExcludedDirNames,
   getServerCommand,
   getRealPath,
   outputDirItems,
