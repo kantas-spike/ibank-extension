@@ -97,10 +97,12 @@ function addItem(name, defaultDir, kind) {
 
       vscode.window.showInformationMessage(`${outputPath} を作成します`);
 
-      const command = `hugo new content -k ${kind} "${outputPath}" --editor code`;
+      const command = `hugo new content -k ${kind} "${outputPath}"`;
       runCommandInIdeaBankTerminal(command);
       if (kind === "idea-bundle") {
         runCommandInIdeaBankTerminal(`code ${realPath}/_index.md`);
+      } else {
+        runCommandInIdeaBankTerminal(`code ${realPath}`);
       }
     } catch (err) {
       vscode.window.showErrorMessage(
@@ -115,7 +117,9 @@ function startServerProcess() {
     vscode.window.showWarningMessage("サーバーは既に起動しています。")
   } else {
     const sitePath = utils.getRealPath(utils.getSitePath())
-    const cmd = utils.getServerCommand()
+    const portNo = utils.getServerPortNo()
+    const cmd = utils.getServerCommand() + ` --port ${portNo}`
+
     serverOutputChannel.appendLine(`sitePath: ${sitePath}`)
     serverOutputChannel.appendLine(`command: ${cmd}`)
     serverProcess = child_process.spawn(cmd, {"cwd": sitePath, shell: true})
@@ -128,6 +132,9 @@ function startServerProcess() {
     })
     serverProcess.on('close', (code) => {
       serverOutputChannel.appendLine(`child process exited with code: ${code}`)
+      if (code !== 0) {
+        vscode.window.showErrorMessage(`サーバープロセスが終了しました。: exitCode: ${code}`)
+      }
     })
 
     if (!serverProcess.exitCode) {
@@ -147,13 +154,13 @@ function stopServerProcess() {
     if(serverProcess.kill('SIGINT')) {
       serverProcess = null
       vscode.window.showInformationMessage("サーバーを停止しました。")
-      serverOutputChannel.show()
     } else {
       vscode.window.showErrorMessage("サーバープロセスの終了に失敗しました")
     }
   } else {
     vscode.window.showWarningMessage("サーバーは起動していません")
   }
+  serverOutputChannel.show()
 }
 
 /**
@@ -166,7 +173,7 @@ function activate(context) {
     'Congratulations, your extension "ibank-extension" is now active!'
   );
   serverOutputChannel = vscode.window.createOutputChannel(terminalName, {log: true})
-  serverOutputChannel.show()
+  serverOutputChannel.clear()
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with  registerCommand
@@ -212,7 +219,6 @@ function activate(context) {
     vscode.commands.registerCommand(
       "ibank-extension.stopServer",
       async () => {
-        serverOutputChannel.show()
         stopServerProcess()
       }
     )

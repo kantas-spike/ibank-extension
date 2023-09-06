@@ -20,6 +20,10 @@ function getServerCommand() {
   return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverCommand")
 }
 
+function getServerPortNo() {
+  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverPortNo")
+}
+
 function expandUserDir(inputPath) {
   const userHome = os.homedir()
   const tilde_slash = /^~\//;
@@ -83,6 +87,7 @@ async function outputDirItems(contentPath, defaultDir) {
 module.exports = {
   getSitePath,
   getContentPath,
+  getServerPortNo,
   getServerCommand,
   getRealPath,
   outputDirItems,

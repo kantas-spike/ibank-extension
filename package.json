@@ -2,7 +2,7 @@
   "name": "ibank-extension",
   "displayName": "ibank-extension",
   "description": "vscode extension for idea bank",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "engines": {
     "vscode": "^1.81.0"
   },
@@ -56,6 +56,11 @@
           "type": "string",
           "default": "content",
           "markdownDescription": "dirname of Idea Bank's content directory"
+        },
+        "ibank-extension.serverPortNo": {
+          "type": "number",
+          "default": 3131,
+          "markdownDescription": "The Port Number of Hugo Server"
         },
         "ibank-extension.serverCommand": {
           "type": "string",
