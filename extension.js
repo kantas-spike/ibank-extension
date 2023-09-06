@@ -97,10 +97,12 @@ function addItem(name, defaultDir, kind) {
 
       vscode.window.showInformationMessage(`${outputPath} を作成します`);
 
-      const command = `hugo new content -k ${kind} "${outputPath}" --editor code`;
+      const command = `hugo new content -k ${kind} "${outputPath}"`;
       runCommandInIdeaBankTerminal(command);
       if (kind === "idea-bundle") {
         runCommandInIdeaBankTerminal(`code ${realPath}/_index.md`);
+      } else {
+        runCommandInIdeaBankTerminal(`code ${realPath}`);
       }
     } catch (err) {
       vscode.window.showErrorMessage(
