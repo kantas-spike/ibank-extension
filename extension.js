@@ -39,65 +39,73 @@ function runCommandInIdeaBankTerminal(command) {
   t.sendText(command, true);
 }
 
-function getSimpleQuickInput(name, defaultDir, kind) {
+function addItem(name, defaultDir, kind) {
   return async () => {
-    const fileName = await vscode.window.showInputBox({
-      title: `${name}の名前入力:`,
-      validateInput: (input) => {
-        if (input.includes(" ")) {
-          return "名前に空白は使用できません";
-        } else if (input.match(/[\\¥\/:*?"<>|]/g)) {
-          return '名前に次の文字は使用できません: \\ ¥ / : * ? " < > |';
+    try {
+      const fileName = await vscode.window.showInputBox({
+        title: `${name}の名前入力:`,
+        validateInput: (input) => {
+          if (input.includes(" ")) {
+            return "名前に空白は使用できません";
+          } else if (input.match(/[\\¥\/:*?"<>|]/g)) {
+            return '名前に次の文字は使用できません: \\ ¥ / : * ? " < > |';
+          } else {
+            return null;
+          }
+        },
+      });
+      let itemName;
+      if (kind === "idea-bundle") {
+        if (fileName) {
+          itemName = `${fileName}`;
         } else {
-          return null;
+          vscode.window.showErrorMessage("フォルダ名を選択してください");
+          return;
         }
-      },
-    });
-    let itemName;
-    if (kind === "idea-bundle") {
-      if (fileName) {
-        itemName = `${fileName}`;
       } else {
-        vscode.window.showErrorMessage("フォルダ名を選択してください");
+        if (fileName) {
+          itemName = `${fileName}.md`;
+        } else {
+          vscode.window.showErrorMessage("ファイル名を選択してください");
+          return;
+        }
+      }
+      const outputFolder = await vscode.window.showQuickPick(
+        utils.outputDirItems(utils.getContentPath(), defaultDir),
+        {
+          canPickMany: false,
+          title: `出力先フォルダの選択:`,
+        }
+      );
+
+      let outputPath;
+      if (outputFolder) {
+        outputPath = path.join(outputFolder, itemName);
+      } else {
+        vscode.window.showErrorMessage("出力フォルダを選択してください");
         return;
       }
-    } else {
-      if (fileName) {
-        itemName = `${fileName}.md`;
-      } else {
-        vscode.window.showErrorMessage("ファイル名を選択してください");
+
+      // vscode.window.showInformationMessage(`${path.join(getContentPath(), outputPath)} を作成します...: ${contentExists(path.join(getContentPath(), outputPath))}`);
+      const realPath = utils.getRealPath(
+        path.join(utils.getContentPath(), outputPath)
+      );
+      if (fs.existsSync(realPath)) {
+        vscode.window.showErrorMessage(`${outputPath}は既に作成済みです`);
         return;
       }
-    }
-    const outputFolder = await vscode.window.showQuickPick(
-      utils.outputDirItems(utils.getContentPath(), defaultDir),
-      {
-        canPickMany: false,
-        title: `出力先フォルダの選択:`,
+
+      vscode.window.showInformationMessage(`${outputPath} を作成します`);
+
+      const command = `hugo new content -k ${kind} "${outputPath}" --editor code`;
+      runCommandInIdeaBankTerminal(command);
+      if (kind === "idea-bundle") {
+        runCommandInIdeaBankTerminal(`code ${realPath}/_index.md`);
       }
-    );
-
-    let outputPath;
-    if (outputFolder) {
-      outputPath = path.join(outputFolder, itemName);
-    } else {
-      vscode.window.showErrorMessage("出力フォルダを選択してください");
-      return;
-    }
-
-    // vscode.window.showInformationMessage(`${path.join(getContentPath(), outputPath)} を作成します...: ${contentExists(path.join(getContentPath(), outputPath))}`);
-    const realPath = utils.getRealPath(path.join(utils.getContentPath(), outputPath));
-    if (fs.existsSync(realPath)) {
-      vscode.window.showErrorMessage(`${outputPath}は既に作成済みです`);
-      return;
-    }
-
-    vscode.window.showInformationMessage(`${outputPath} を作成します`);
-
-    const command = `hugo new content -k ${kind} "${outputPath}" --editor code`;
-    runCommandInIdeaBankTerminal(command);
-    if (kind === "idea-bundle") {
-      runCommandInIdeaBankTerminal(`code ${realPath}/_index.md`);
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        `予期しないエラーが発生しました。: ${err.message}`
+      );
     }
   };
 }
@@ -166,28 +174,28 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addIdea",
-      getSimpleQuickInput("アイデア", "ideas", "idea")
+      addItem("アイデア", "ideas", "idea")
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addIdeaBundle",
-      getSimpleQuickInput("アイデア", "ideas", "idea-bundle")
+      addItem("アイデア", "ideas", "idea-bundle")
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addStone",
-      getSimpleQuickInput("自然石", "fieldstones", "fieldstone")
+      addItem("自然石", "fieldstones", "fieldstone")
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addTil",
-      getSimpleQuickInput("TIL", "til", "til")
+      addItem("TIL", "til", "til")
     )
   );
 

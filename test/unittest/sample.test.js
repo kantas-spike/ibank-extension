@@ -38,17 +38,17 @@ suite('Extension Test Suite', () => {
 		assert.strictEqual("/Users/kanta/test", utils.getRealPath("/Users/kanta/test"));
 	});
 
-	test('outputDirItems', () => {
-		const contentPth = path.resolve(`${__dirname}/assets/content`)
-		let list = utils.outputDirItems(contentPth, "ideas")
+	test('outputDirItems', async () => {
+		const contentPth = path.resolve(`${__dirname}/../assets/sample/content`)
+		let list = await utils.outputDirItems(contentPth, "ideas")
 		assert.strictEqual(3, list.length)
 		assert.strictEqual("ideas", list[0])
 
-		list = utils.outputDirItems(contentPth, "til")
+		list = await utils.outputDirItems(contentPth, "til")
 		assert.strictEqual(3, list.length)
 		assert.strictEqual("til", list[0])
 
-		list = utils.outputDirItems(contentPth, "fieldstones")
+		list = await utils.outputDirItems(contentPth, "fieldstones")
 		assert.strictEqual(3, list.length)
 		assert.strictEqual("fieldstones", list[0])
 	})
