@@ -39,7 +39,7 @@ function runCommandInIdeaBankTerminal(command) {
   t.sendText(command, true);
 }
 
-function getSimpleQuickInput(name, defaultDir, kind) {
+function addItem(name, defaultDir, kind) {
   return async () => {
     const fileName = await vscode.window.showInputBox({
       title: `${name}の名前入力:`,
@@ -166,28 +166,28 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addIdea",
-      getSimpleQuickInput("アイデア", "ideas", "idea")
+      addItem("アイデア", "ideas", "idea")
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addIdeaBundle",
-      getSimpleQuickInput("アイデア", "ideas", "idea-bundle")
+      addItem("アイデア", "ideas", "idea-bundle")
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addStone",
-      getSimpleQuickInput("自然石", "fieldstones", "fieldstone")
+      addItem("自然石", "fieldstones", "fieldstone")
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "ibank-extension.addTil",
-      getSimpleQuickInput("TIL", "til", "til")
+      addItem("TIL", "til", "til")
     )
   );
 
