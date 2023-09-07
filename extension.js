@@ -20,7 +20,6 @@ function createIdeaBankTerminal() {
   const t = vscode.window.createTerminal({
     name: terminalName,
   });
-  t.sendText(`cd ${utils.getSitePath()}`, true);
   return t;
 }
 
@@ -37,6 +36,8 @@ function openIdeaBankTerminal() {
 
 function runCommandInIdeaBankTerminal(command) {
   const t = openIdeaBankTerminal();
+  // 必ず、sitePathからコマンドを実行する
+  t.sendText(`cd ${utils.getSitePath()}`, true);
   t.sendText(command, true);
 }
 
