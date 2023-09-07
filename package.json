@@ -2,7 +2,7 @@
   "name": "ibank-extension",
   "displayName": "ibank-extension",
   "description": "vscode extension for idea bank",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.81.0"
@@ -48,8 +48,56 @@
         "command": "ibank-extension.restartServer",
         "category": "Idea Bank",
         "title": "Restart Hugo Server"
+      },
+      {
+        "command": "ibank-extension.setExpiryDate",
+        "category": "Idea Bank",
+        "title": "Mark expired to the Markdown file"
+      },
+      {
+        "command": "ibank-extension.setExpiryDateWithReason",
+        "category": "Idea Bank",
+        "title": "Mark expired to the Markdown file with reason"
+      },
+      {
+        "command": "ibank-extension.updateLastmod",
+        "category": "Idea Bank",
+        "title": "Update lastmod of the Markdown file"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "ibank-extension.setExpiryDate",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "ibank-extension.setExpiryDateWithReason",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "ibank-extension.updateLastmod",
+          "when": "editorLangId == markdown"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceLangId == markdown",
+          "command": "ibank-extension.setExpiryDate",
+          "group": "ibank"
+        },
+        {
+          "when": "resourceLangId == markdown",
+          "command": "ibank-extension.setExpiryDateWithReason",
+          "group": "ibank"
+        },
+        {
+          "when": "resourceLangId == markdown",
+          "command": "ibank-extension.updateLastmod",
+          "group": "ibank"
+        }
+      ]
+    },
     "configuration": {
       "title": "Idea Bank",
       "properties": {
@@ -98,5 +146,8 @@
     "glob": "^10.3.3",
     "mocha": "^10.2.0",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "yaml": "^2.3.2"
   }
 }

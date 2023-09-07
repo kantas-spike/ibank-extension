@@ -1,8 +1,10 @@
 const assert = require('assert');
 const utils = require('../../utils')
+const fm = require('../../frontmatter')
 const path = require('path')
 const vscode = require("vscode")
 const fs = require('fs')
+const YAML = require('yaml')
 
 suiteSetup(async () => {
 	console.log("suiteSetup!!", vscode.workspace.workspaceFolders[0].uri.fsPath)
@@ -25,6 +27,9 @@ suiteSetup(async () => {
 	fs.mkdirSync(path.join(contentDir, "sample02/data"))
 	fs.mkdirSync(path.join(contentDir, "sample03"))
 	fs.mkdirSync(path.join(contentDir, "sample03/images"))
+
+  fs.copyFileSync(path.resolve(`${__dirname}/../assets/fm/withFM.md`), path.join(contentDir, "sample01/withFM.md"))
+  fs.copyFileSync(path.resolve(`${__dirname}/../assets/fm/withoutFM.md`), path.join(contentDir, "sample02/withoutFM.md"))
 })
 
 suite('Extension Test Suite', () => {
@@ -85,6 +90,37 @@ suite('Extension Test Suite', () => {
 		assert.strictEqual("fieldstones", list[0])
 	})
 
+  test("with frontmatter", async () => {
+    const contentDir = path.resolve(
+      path.join(__dirname, "../assets/sample/content")
+    );
+    const file1 = path.join(contentDir, "sample01/withFM.md");
+    const doc = await vscode.workspace.openTextDocument(file1);
+    await vscode.window.showTextDocument(doc);
+    const editor = vscode.window.activeTextEditor;
+    const range = fm.getFrontmatterRange(editor);
+    const yamlStr = editor.document.getText(range);
+    console.log(yamlStr);
+    const obj = YAML.parse(yamlStr);
+    assert.deepEqual(obj, {
+      title: "フロントマターのテストです",
+      date: "2023-09-07T11:01:52+09:00",
+      draft: false,
+      categories: ["category1"],
+      tags: ["tag1"],
+    });
+  });
 
+  test("with frontmatter", async () => {
+    const contentDir = path.resolve(
+      path.join(__dirname, "../assets/sample/content")
+    );
+    const file = path.join(contentDir, "sample02/withoutFM.md");
+    const doc = await vscode.workspace.openTextDocument(file);
+    await vscode.window.showTextDocument(doc);
+    const editor = vscode.window.activeTextEditor;
+    const range = fm.getFrontmatterRange(editor);
+    assert.strictEqual(range, null);
+  });
 
 });
