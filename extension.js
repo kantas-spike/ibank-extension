@@ -164,6 +164,11 @@ function stopServerProcess() {
   serverOutputChannel.show()
 }
 
+function restartServerProcess() {
+  stopServerProcess()
+  startServerProcess()
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -221,6 +226,15 @@ function activate(context) {
       "ibank-extension.stopServer",
       async () => {
         stopServerProcess()
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "ibank-extension.restartServer",
+      async () => {
+        restartServerProcess()
       }
     )
   );
