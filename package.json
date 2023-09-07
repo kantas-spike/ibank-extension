@@ -42,6 +42,11 @@
         "command": "ibank-extension.stopServer",
         "category": "Idea Bank",
         "title": "Stop Hugo Server"
+      },
+      {
+        "command": "ibank-extension.restartServer",
+        "category": "Idea Bank",
+        "title": "Restart Hugo Server"
       }
     ],
     "configuration": {
