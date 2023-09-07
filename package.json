@@ -66,6 +66,20 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "ibank-extension.setExpiryDate",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "ibank-extension.setExpiryDateWithReason",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "ibank-extension.updateLastmod",
+          "when": "editorLangId == markdown"
+        }
+      ],
       "editor/context": [
         {
           "when": "resourceLangId == markdown",
