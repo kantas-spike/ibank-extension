@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const child_process = require('child_process')
 const utils = require("./utils")
+const fm = require("./frontmatter")
 
 
 // This method is called when your extension is activated
@@ -235,6 +236,45 @@ function activate(context) {
       "ibank-extension.restartServer",
       async () => {
         restartServerProcess()
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "ibank-extension.setExpiryDate",
+      async () => {
+        console.log("setExpiryDate")
+        fm.updateFrontMatter(vscode.window.activeTextEditor, {'expiryDate': (new Date()).toISOString()})
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "ibank-extension.setExpiryDateWithReason",
+      async () => {
+        const editor = vscode.window.activeTextEditor
+        if (!fm.getFrontmatterRange(editor)) {
+          return
+        }
+        const reason = await vscode.window.showInputBox({
+          title: "期限切れの理由: "})
+        if (!reason) {
+          vscode.window.showErrorMessage("期限切れの理由を入力してください。");
+          return
+        }
+        fm.updateFrontMatter(editor, {'expiryDate': (new Date()).toISOString(), 'reason_for_expiration': reason})
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "ibank-extension.updateLastmod",
+      async () => {
+        console.log("updateLastmod")
+        fm.updateFrontMatter(vscode.window.activeTextEditor, {'lastmod': (new Date()).toISOString()})
       }
     )
   );

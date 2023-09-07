@@ -48,8 +48,42 @@
         "command": "ibank-extension.restartServer",
         "category": "Idea Bank",
         "title": "Restart Hugo Server"
+      },
+      {
+        "command": "ibank-extension.setExpiryDate",
+        "category": "Idea Bank",
+        "title": "Mark expired to the Markdown file"
+      },
+      {
+        "command": "ibank-extension.setExpiryDateWithReason",
+        "category": "Idea Bank",
+        "title": "Mark expired to the Markdown file with reason"
+      },
+      {
+        "command": "ibank-extension.updateLastmod",
+        "category": "Idea Bank",
+        "title": "Update lastmod of the Markdown file"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceLangId == markdown",
+          "command": "ibank-extension.setExpiryDate",
+          "group": "ibank"
+        },
+        {
+          "when": "resourceLangId == markdown",
+          "command": "ibank-extension.setExpiryDateWithReason",
+          "group": "ibank"
+        },
+        {
+          "when": "resourceLangId == markdown",
+          "command": "ibank-extension.updateLastmod",
+          "group": "ibank"
+        }
+      ]
+    },
     "configuration": {
       "title": "Idea Bank",
       "properties": {
