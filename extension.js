@@ -101,9 +101,9 @@ function addItem(name, defaultDir, kind) {
       const command = `hugo new content -k ${kind} "${outputPath}"`;
       runCommandInIdeaBankTerminal(command);
       if (kind === "idea-bundle") {
-        runCommandInIdeaBankTerminal(`code ${realPath}/_index.md`);
+        runCommandInIdeaBankTerminal(`code "${realPath}/_index.md"`);
       } else {
-        runCommandInIdeaBankTerminal(`code ${realPath}`);
+        runCommandInIdeaBankTerminal(`code "${realPath}"`);
       }
     } catch (err) {
       vscode.window.showErrorMessage(
