@@ -133,7 +133,6 @@
     "package": "npx vsce package",
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "unittest": "npx mocha ./unittest",
     "test": "node ./test/runTest.js"
   },
   "devDependencies": {
