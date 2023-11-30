@@ -90,15 +90,15 @@ suite("Extension Test Suite", () => {
   test("outputDirItems", async () => {
     const contentPth = path.resolve(`${__dirname}/../assets/sample/content`);
     let list = await utils.outputDirItems(contentPth, "ideas");
-    assert.strictEqual(9, list.length);
+    assert.strictEqual(10, list.length);
     assert.strictEqual("ideas", list[0]);
 
     list = await utils.outputDirItems(contentPth, "til");
-    assert.strictEqual(9, list.length);
+    assert.strictEqual(10, list.length);
     assert.strictEqual("til", list[0]);
 
     list = await utils.outputDirItems(contentPth, "fieldstones");
-    assert.strictEqual(9, list.length);
+    assert.strictEqual(10, list.length);
     assert.strictEqual("fieldstones", list[0]);
   });
 
@@ -108,18 +108,18 @@ suite("Extension Test Suite", () => {
       "data",
       "images",
     ]);
-    assert.strictEqual(7, list.length);
+    assert.strictEqual(8, list.length);
     assert.strictEqual("ideas", list[0]);
 
     list = await utils.outputDirItems(contentPth, "til", ["data", "images"]);
-    assert.strictEqual(7, list.length);
+    assert.strictEqual(8, list.length);
     assert.strictEqual("til", list[0]);
 
     list = await utils.outputDirItems(contentPth, "fieldstones", [
       "data",
       "images",
     ]);
-    assert.strictEqual(7, list.length);
+    assert.strictEqual(8, list.length);
     assert.strictEqual("fieldstones", list[0]);
   });
 

@@ -54,14 +54,21 @@ async function getDirs(baseDir, isRoot = true, ignoreDirNames = []) {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });
 
     for (const entry of entries) {
+      if (ignoreDirNames.includes(entry.name)) {
+        continue;
+      }
       if (entry.isDirectory()) {
-        if (ignoreDirNames.includes(entry.name)) {
-          continue;
-        }
         const aDir = path.resolve(baseDir, entry.name);
         results.push(aDir);
         const subDirs = await getDirs(aDir, false, ignoreDirNames);
         results.push(...subDirs);
+      } else if (entry.isSymbolicLink()) {
+        const slink = path.resolve(baseDir, entry.name);
+        const realPath = await fs.readlink(slink);
+        const stat = await fs.lstat(realPath);
+        if (stat.isDirectory()) {
+          results.push(slink);
+        }
       }
     }
 
