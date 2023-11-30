@@ -1,8 +1,10 @@
 node_modules
 .vscode-test/
 *.vsix
+.DS_Store
 test/assets/sample/.vscode/settings.json
 test/assets/sample/.hugo_build.lock
 test/assets/sample/hugo_stats.json
 test/assets/sample/resources/
 test/assets/sample/content/*
+
