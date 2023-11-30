@@ -1,7 +1,7 @@
 const vscode = require("vscode");
 const path = require("path");
 const fs = require("fs/promises");
-const os = require("os")
+const os = require("os");
 
 const EXTENSION_NAME = "ibank-extension";
 
@@ -12,24 +12,26 @@ function getSitePath() {
 function getContentPath() {
   return path.join(
     getSitePath(),
-    vscode.workspace.getConfiguration(EXTENSION_NAME).get("contentDir")
+    vscode.workspace.getConfiguration(EXTENSION_NAME).get("contentDir"),
   );
 }
 
 function getServerCommand() {
-  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverCommand")
+  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverCommand");
 }
 
 function getServerPortNo() {
-  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverPortNo")
+  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("serverPortNo");
 }
 
 function getExcludedDirNames() {
-  return vscode.workspace.getConfiguration(EXTENSION_NAME).get("excludedDirNames")
+  return vscode.workspace
+    .getConfiguration(EXTENSION_NAME)
+    .get("excludedDirNames");
 }
 
 function expandUserDir(inputPath) {
-  const userHome = os.homedir()
+  const userHome = os.homedir();
   const tilde_slash = /^~\//;
   if (inputPath.match(tilde_slash)) {
     return path.join(userHome, inputPath.replace(tilde_slash, ""));
@@ -44,9 +46,9 @@ function getRealPath(inputPath) {
   return expandUserDir(inputPath);
 }
 
-const ITEM_DIRS = ["ideas", "fieldstones", "til"]
+const ITEM_DIRS = ["ideas", "fieldstones", "til"];
 
-async function getDirs(baseDir, isRoot = true, ignoreDirNames=[]) {
+async function getDirs(baseDir, isRoot = true, ignoreDirNames = []) {
   const results = [];
   try {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });
@@ -54,7 +56,7 @@ async function getDirs(baseDir, isRoot = true, ignoreDirNames=[]) {
     for (const entry of entries) {
       if (entry.isDirectory()) {
         if (ignoreDirNames.includes(entry.name)) {
-          continue
+          continue;
         }
         const aDir = path.resolve(baseDir, entry.name);
         results.push(aDir);
@@ -71,15 +73,15 @@ async function getDirs(baseDir, isRoot = true, ignoreDirNames=[]) {
       });
     }
   } catch (err) {
-    console.error(err.message)
-    throw new Error(`ディレクトリ一覧の取得に失敗しました。: ${err.message}`)
+    console.error(err.message);
+    throw new Error(`ディレクトリ一覧の取得に失敗しました。: ${err.message}`);
   }
   return results;
 }
 
-async function outputDirItems(contentPath, defaultDir, ignoreDirNames=[]) {
+async function outputDirItems(contentPath, defaultDir, ignoreDirNames = []) {
   const targetPath = expandUserDir(contentPath);
-  const list = await getDirs(targetPath, true, ignoreDirNames)
+  const list = await getDirs(targetPath, true, ignoreDirNames);
 
   const results = list.map((d) => path.relative(targetPath, d));
 
