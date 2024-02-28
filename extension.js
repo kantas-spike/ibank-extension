@@ -44,18 +44,17 @@ function runCommandInIdeaBankTerminal(command) {
 function addItem(name, defaultDir, kind) {
   return async () => {
     try {
-      const fileName = await vscode.window.showInputBox({
+      const inputValue = await vscode.window.showInputBox({
         title: `${name}の名前入力:`,
         validateInput: (input) => {
-          if (input.includes(" ")) {
-            return "名前に空白は使用できません";
-          } else if (input.match(/[\\¥\/:*?"<>|]/g)) {
+          if (input.match(/[\\¥\/:*?"<>|]/g)) {
             return '名前に次の文字は使用できません: \\ ¥ / : * ? " < > |';
           } else {
             return null;
           }
         },
       });
+      const fileName = inputValue.replace(/\s+/g, "-");
       let itemName;
       if (kind === "idea-bundle") {
         if (fileName) {
