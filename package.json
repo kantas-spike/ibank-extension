@@ -2,7 +2,7 @@
   "name": "ibank-extension",
   "displayName": "ibank-extension",
   "description": "vscode extension for idea bank",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.81.0"
@@ -10,6 +10,11 @@
   "categories": [
     "Other"
   ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kantas-spike/ibank-extension.git"
+  },
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
