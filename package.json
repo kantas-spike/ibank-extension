@@ -2,7 +2,7 @@
   "name": "ibank-extension",
   "displayName": "ibank-extension",
   "description": "vscode extension for idea bank",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.81.0"
@@ -152,6 +152,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "smol-toml": "^1.3.1",
     "yaml": "^2.3.2"
   }
 }

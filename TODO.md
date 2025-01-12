@@ -1,3 +1,3 @@
 # やること
 
-1. [ ] updateLastmod の toml対応
+1. [x] updateLastmod の toml対応
